@@ -1,1 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
+
+@theme {
+	/* Backgrounds */
+	--color-bg: #0d0f14;
+	--color-surface: #141720;
+	--color-elevated: #1c2030;
+	--color-overlay: #242838;
+
+	/* Borders */
+	--color-border: #252836;
+
+	/* Text */
+	--color-text: #f4f4f2;
+	--color-muted: #9a9890;
+
+	/* Accents */
+	--color-primary: #1d9e75;
+	--color-blue: #2e7dd1;
+	--color-danger: #e24b4a;
+	--color-purple: #7f77dd;
+	--color-amber: #ba7517;
+}
+
+body {
+	@apply bg-bg text-text;
+	font-family: "DM Sans", sans-serif;
+}
+
+.mono {
+	font-family: "JetBrains Mono", monospace;
+}
+.card {
+	background-color: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: 12px;
+}
+.chart {
+	@apply bg-surface border border-border rounded-xl h-75 p-4;
+}
