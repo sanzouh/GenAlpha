@@ -3,40 +3,70 @@
 @import "tailwindcss";
 
 @theme {
+	--font-sans: "DM Sans", sans-serif;
+	--font-mono: "JetBrains Mono", monospace;
+
 	/* Backgrounds */
-	--color-bg: #0d0f14;
+	--color-base: #0d0f14;
 	--color-surface: #141720;
 	--color-elevated: #1c2030;
 	--color-overlay: #242838;
+	--color-highlight: #2a3048;
 
-	/* Borders */
-	--color-border: #252836;
+	/* ── Brand green ── */
+	--color-green-500: #1d9e75;
+	--color-green-400: #3db890;
+	--color-green-300: #5dcaa5;
+	--color-green-100: rgba(29, 158, 117, 0.12);
 
-	/* Text */
-	--color-text: #f4f4f2;
-	--color-muted: #9a9890;
+	/* ── Blue (Pareto) ── */
+	--color-blue-500: #2e7dd1;
+	--color-blue-300: #6aabf7;
+	--color-blue-100: rgba(46, 125, 209, 0.12);
 
-	/* Accents */
-	--color-primary: #1d9e75;
-	--color-blue: #2e7dd1;
-	--color-danger: #e24b4a;
-	--color-purple: #7f77dd;
-	--color-amber: #ba7517;
+	/* ── Red (risk) ── */
+	--color-red-500: #e24b4a;
+	--color-red-400: #e86b6a;
+	--color-red-100: rgba(226, 75, 74, 0.12);
+
+	/* ── Amber (warnings) ── */
+	--color-amber-500: #ba7517;
+	--color-amber-300: #ef9f27;
+
+	/* ── Purple (academic) ── */
+	--color-purple-500: #7f77dd;
+	--color-purple-300: #afa9ec;
+	--color-purple-100: rgba(127, 119, 221, 0.12);
+
+	/* ── Neutrals ── */
+	--color-gray-900: #f4f4f2;
+	--color-gray-600: #9a9890;
+	--color-gray-400: #5c5b57;
+	--color-gray-200: #252836;
+	--color-gray-100: #1e2130;
+
+	/* ── Asset colors ── */
+	--color-aapl: #378add;
+	--color-msft: #1d9e75;
+	--color-tsla: #e24b4a;
+	--color-googl: #ba7517;
+	--color-amzn: #7f77dd;
+	--color-nvda: #d85a30;
+
+	/* ── Border radius ── */
+	--radius-sm: 8px;
+	--radius-md: 10px;
+	--radius-lg: 12px;
+	--radius-pill: 99px;
 }
 
 body {
-	@apply bg-bg text-text;
-	font-family: "DM Sans", sans-serif;
+	background-color: var(--color-base);
+	color: var(--color-gray-900);
+	font-family: var(--font-sans), sans-serif;
+	-webkit-font-smoothing: antialiased; /* rend le texte plus fin et plus net sur webkit: chrome, safari*/
+	-moz-osx-font-smoothing: grayscale; /* même chose mais pour firefox */
 }
-
 .mono {
-	font-family: "JetBrains Mono", monospace;
-}
-.card {
-	background-color: var(--color-surface);
-	border: 1px solid var(--color-border);
-	border-radius: 12px;
-}
-.chart {
-	@apply bg-surface border border-border rounded-xl h-75 p-4;
+	font-family: var(--font-mono);
 }

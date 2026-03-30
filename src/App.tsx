@@ -1,31 +1,30 @@
+import Topbar from "./components/Topbar";
 import "./App.css";
 
 function App() {
 	return (
 		<>
-			<div className="grid grid-cols-4 min-h-screen">
-				{/* Sidebar */}
-				<aside className="card col-span-1 p-4 border-r">
-					<h1 className="text-lg font-semibold">GenAlpha</h1>
-				</aside>
+			<div className="h-screen flex flex-col bg-base text-gray-900 overflow-hidden">
+				<Topbar />
 
-				{/* Main */}
-				<main className="col-span-3 p-6 space-y-4">
-					{/* Metrics */}
-					<div className="grid grid-cols-4 gap-4">
-						{[1, 2, 3, 4].map((i) => (
-							<div key={i} className="card p-4 rounded-xl border">
-								Metric
-							</div>
-						))}
-					</div>
+				<div className="flex flex-1 gap-4 p-4 overflow-hidden">
+					{/* Colonne gauche — fixe 280px */}
+					<aside className="w-70 shrink-0 flex flex-col gap-3 overflow-y-auto">
+						<div className="h-48 bg-surface">Params</div>
+						<div className="h-48 bg-surface">Assets</div>
+						<div className="h-12 bg-surface">CTA</div>
+					</aside>
 
-					{/* Charts */}
-					<div className="grid grid-cols-2 gap-4">
-						<div className="chart">Chart</div>
-						<div className="chart">Chart</div>
-					</div>
-				</main>
+					{/* Colonne droite — remplit le reste */}
+					<main className="flex-1 flex flex-col gap-3 overflow-hidden">
+						<div className="h-16 bg-surface">Metrics</div>
+						<div className="h-16 bg-surface">Progress</div>
+						<div className="flex flex-1 gap-3 overflow-hidden">
+							<div className="flex-1 bg-surface">Convergence</div>
+							<div className="flex-1 bg-surface">Pareto</div>
+						</div>
+					</main>
+				</div>
 			</div>
 		</>
 	);
