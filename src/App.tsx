@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Topbar from "./components/Topbar";
 import ParamPanel from "./components/ParamPanel";
 import AssetList from "./components/AssetList";
@@ -15,6 +15,10 @@ const defaultParams: Record<string, number> = {
 export default function App() {
 	const [params, setParams] = useState(defaultParams);
 	const [running, setRunning] = useState(false);
+
+	useEffect(() => {
+		document.documentElement.classList.add("dark");
+	}, []);
 
 	const handleChange = (label: string, value: number) => {
 		setParams((prev) => ({ ...prev, [label]: value }));

@@ -21,7 +21,7 @@ export default function Topbar() {
 					className="w-2 h-2 rounded-full bg-green-500
                          animate-pulse"
 				/>
-				<span className="text-[15px] font-semibold">GenPortfolio</span>
+				<span className="text-[15px] font-semibold">GenAlpha</span>
 				<span className="w-px h-4 bg-gray-200" />
 				<span className="text-[12px] text-gray-600">
 					Genetic Algorithm Optimizer

@@ -7,7 +7,7 @@ interface Param {
 	max: number;
 	step: number;
 	unit?: string;
-	track?: "green" | "amber" | "red";
+	trackClassName?: string;
 }
 
 const params: Param[] = [
@@ -17,7 +17,7 @@ const params: Param[] = [
 		min: 20,
 		max: 200,
 		step: 10,
-		track: "green",
+		trackClassName: "bg-green-500",
 	},
 	{
 		label: "Générations",
@@ -25,7 +25,7 @@ const params: Param[] = [
 		min: 20,
 		max: 150,
 		step: 10,
-		track: "green",
+		trackClassName: "bg-green-500",
 	},
 	{
 		label: "Crossover",
@@ -34,7 +34,7 @@ const params: Param[] = [
 		max: 95,
 		step: 5,
 		unit: "%",
-		track: "green",
+		trackClassName: "bg-green-500",
 	},
 	{
 		label: "Mutation",
@@ -43,7 +43,7 @@ const params: Param[] = [
 		max: 25,
 		step: 1,
 		unit: "%",
-		track: "amber",
+		trackClassName: "bg-amber-500",
 	},
 	{
 		label: "Max Risk",
@@ -52,15 +52,15 @@ const params: Param[] = [
 		max: 40,
 		step: 1,
 		unit: "%",
-		track: "red",
+		trackClassName: "bg-red-500",
 	},
 ];
 
-const trackColor: Record<string, string> = {
+/* const trackColor: Record<string, string> = {
 	green: "bg-green-500",
 	amber: "bg-amber-500",
 	red: "bg-red-500",
-};
+}; */
 
 interface ParamPanelProps {
 	values: Record<string, number>;
@@ -90,16 +90,15 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 					</div>
 
 					{/* Slider shadcn customisé */}
-					<div className={`slider-${p.track ?? "green"}`}>
-						<Slider
-							min={p.min}
-							max={p.max}
-							step={p.step}
-							defaultValue={[p.value]}
-							onValueChange={([v]) => onChange(p.label, v)}
-							className="w-full"
-						/>
-					</div>
+					<Slider
+						min={p.min}
+						max={p.max}
+						step={p.step}
+						defaultValue={[p.value]}
+						onValueChange={([v]) => onChange(p.label, v)}
+						trackClassName={p.trackClassName}
+						className="w-full"
+					/>
 				</div>
 			))}
 
