@@ -5,6 +5,7 @@ import AssetList from "./components/AssetList";
 import LaunchButton from "./components/LaunchButton";
 import MetricsBar from "./components/MetricsBar";
 import ProgressBar from "./components/ProgressBar";
+import ConvergenceChart from "./components/ConvergenceChart";
 
 const defaultParams: Record<string, number> = {
 	Population: 80,
@@ -60,11 +61,7 @@ export default function App() {
 						mutation={params["Mutation"]}
 					/>
 					<div className="flex flex-1 gap-3 overflow-hidden">
-						<div className="card flex-1 flex items-center justify-center">
-							<span className="text-gray-600 text-sm">
-								Convergence — commit 8
-							</span>
-						</div>
+						<ConvergenceChart data={[]} />
 						<div className="card flex-1 flex items-center justify-center">
 							<span className="text-gray-600 text-sm">Pareto — commit 8</span>
 						</div>
