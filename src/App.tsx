@@ -4,6 +4,7 @@ import ParamPanel from "./components/ParamPanel";
 import AssetList from "./components/AssetList";
 import LaunchButton from "./components/LaunchButton";
 import MetricsBar from "./components/MetricsBar";
+import ProgressBar from "./components/ProgressBar";
 
 const defaultParams: Record<string, number> = {
 	Population: 80,
@@ -45,15 +46,19 @@ export default function App() {
 				{/* Colonne droite — placeholder */}
 				<main className="flex-1 flex flex-col gap-3 overflow-hidden">
 					<MetricsBar
-						expectedReturn={null}
-						volatility={null}
-						sharpe={null}
+						expectedReturn={14.2}
+						volatility={12.7}
+						sharpe={1.02}
 						generation={0}
 						maxGenerations={params["Générations"]}
 					/>
-					<div className="card h-16 flex items-center">
-						<span className="text-gray-600 text-sm">Progress — commit 7</span>
-					</div>
+					<ProgressBar
+						generation={0}
+						maxGenerations={params["Générations"]}
+						populationSize={params["Population"]}
+						crossover={params["Crossover"]}
+						mutation={params["Mutation"]}
+					/>
 					<div className="flex flex-1 gap-3 overflow-hidden">
 						<div className="card flex-1 flex items-center justify-center">
 							<span className="text-gray-600 text-sm">
