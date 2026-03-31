@@ -1,10 +1,10 @@
 const assets = [
-	{ ticker: "AAPL", name: "Apple", ret: 12.4, color: "bg-aapl" },
-	{ ticker: "MSFT", name: "Microsoft", ret: 14.1, color: "bg-msft" },
-	{ ticker: "TSLA", name: "Tesla", ret: 22.3, color: "bg-tsla" },
-	{ ticker: "GOOGL", name: "Alphabet", ret: 11.8, color: "bg-googl" },
-	{ ticker: "AMZN", name: "Amazon", ret: 13.6, color: "bg-amzn" },
-	{ ticker: "NVDA", name: "Nvidia", ret: 28.4, color: "bg-nvda" },
+	{ ticker: "AAPL", name: "Apple Inc.", ret: 12.4, color: "bg-aapl" },
+	{ ticker: "MSFT", name: "Microsoft Corp.", ret: 14.1, color: "bg-msft" },
+	{ ticker: "TSLA", name: "Tesla Inc.", ret: 22.3, color: "bg-tsla" },
+	{ ticker: "GOOGL", name: "Alphabet Inc.", ret: 11.8, color: "bg-googl" },
+	{ ticker: "AMZN", name: "Amazon.com Inc.", ret: 13.6, color: "bg-amzn" },
+	{ ticker: "NVDA", name: "Nvidia Corp.", ret: 28.4, color: "bg-nvda" },
 ];
 
 const MAX_RET = 28.4;
@@ -12,7 +12,9 @@ const MAX_RET = 28.4;
 export default function AssetList() {
 	return (
 		<div className="card flex flex-col">
-			<p className="section-label mb-3">Actifs disponibles</p>
+			<p className="text-[13px] font-semibold uppercase text-gray-900 mb-3">
+				Available assets
+			</p>
 
 			{assets.map((a, i) => (
 				<div

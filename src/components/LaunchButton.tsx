@@ -31,7 +31,7 @@ export default function LaunchButton({ running, onLaunch }: LaunchButtonProps) {
 					</span>
 				</span>
 			) : (
-				"Lancer l'optimisation ↗"
+				"Launch optimisation ↗"
 			)}
 		</button>
 	);

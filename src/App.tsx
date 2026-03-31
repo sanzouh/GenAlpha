@@ -6,6 +6,7 @@ import LaunchButton from "./components/LaunchButton";
 import MetricsBar from "./components/MetricsBar";
 import ProgressBar from "./components/ProgressBar";
 import ConvergenceChart from "./components/ConvergenceChart";
+import ParetoChart from "./components/ParetoChart";
 
 const defaultParams: Record<string, number> = {
 	Population: 80,
@@ -62,9 +63,7 @@ export default function App() {
 					/>
 					<div className="flex flex-1 gap-3 overflow-hidden">
 						<ConvergenceChart data={[]} />
-						<div className="card flex-1 flex items-center justify-center">
-							<span className="text-gray-600 text-sm">Pareto — commit 8</span>
-						</div>
+						<ParetoChart population={[]} paretoFront={[]} />
 					</div>
 				</main>
 			</div>

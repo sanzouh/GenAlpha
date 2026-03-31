@@ -56,12 +56,6 @@ const params: Param[] = [
 	},
 ];
 
-/* const trackColor: Record<string, string> = {
-	green: "bg-green-500",
-	amber: "bg-amber-500",
-	red: "bg-red-500",
-}; */
-
 interface ParamPanelProps {
 	values: Record<string, number>;
 	onChange: (label: string, value: number) => void;
@@ -71,7 +65,9 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 	return (
 		<div className="card flex flex-col gap-1">
 			{/* Header */}
-			<p className="section-label mb-3">Algorithme génétique</p>
+			<p className="text-[13px] font-semibold uppercase text-gray-900">
+				Algorithm parameters
+			</p>
 
 			{params.map((p, i) => (
 				<div
@@ -108,8 +104,8 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
                       bg-purple-100 px-3 py-2.5"
 			>
 				<p className="text-[11px] text-gray-600 italic leading-relaxed">
-					Crossover élevé → mélange rapide des bonnes solutions. Mutation élevée
-					→ exploration mais risque de divergence.
+					High crossover → rapid combination of effective solutions. High
+					mutation → exploration but risk of divergence.
 				</p>
 			</div>
 		</div>

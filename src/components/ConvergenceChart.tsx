@@ -38,7 +38,9 @@ const CustomTooltip: FC<Partial<TooltipContentProps<number, string>>> = ({
 export default function ConvergenceChart({ data }: ConvergenceChartProps) {
 	return (
 		<div className="card flex-1 flex flex-col gap-3 overflow-hidden">
-			<p className="section-label">Fitness Convergence</p>
+			<p className="text-[13px] font-semibold uppercase text-gray-900">
+				Fitness Convergence
+			</p>
 
 			{data.length === 0 ? (
 				// État vide — avant que l'algo tourne
