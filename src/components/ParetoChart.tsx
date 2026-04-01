@@ -63,8 +63,8 @@ export default function ParetoChart({
 				</div>
 			) : (
 				<>
-					<ResponsiveContainer width="100%" height="100%">
-						<ScatterChart margin={{ top: 4, right: 8, bottom: 0, left: -20 }}>
+					<ResponsiveContainer width="100%" height="100%" debounce={0}>
+						<ScatterChart margin={{ top: 12, right: 12, bottom: 8, left: 0 }}>
 							<XAxis
 								dataKey="volatility"
 								name="Volatilité"
@@ -73,8 +73,9 @@ export default function ParetoChart({
 									fontSize: 9,
 									fill: "#5c5b57",
 								}}
-								tickLine={false}
-								axisLine={false}
+								tickLine={true}
+								axisLine={true}
+								padding={{ left: 8, right: 8 }}
 								tickFormatter={(v) => `${v.toFixed(1)}%`}
 							/>
 							<YAxis
@@ -85,8 +86,9 @@ export default function ParetoChart({
 									fontSize: 9,
 									fill: "#5c5b57",
 								}}
-								tickLine={false}
-								axisLine={false}
+								tickLine={true}
+								axisLine={true}
+								padding={{ top: 8, bottom: 8 }}
 							/>
 							<Tooltip content={<CustomTooltip />} />
 
@@ -96,10 +98,18 @@ export default function ParetoChart({
 								fill="#5c5b57"
 								fillOpacity={0.4}
 								r={3}
+								isAnimationActive={false}
+								animationDuration={0}
 							/>
 
 							{/* Front de Pareto — bleu mis en avant */}
-							<Scatter data={paretoFront} fill="#2e7dd1" r={5} />
+							<Scatter
+								data={paretoFront}
+								fill="#2e7dd1"
+								r={5}
+								isAnimationActive={false}
+								animationDuration={0}
+							/>
 						</ScatterChart>
 					</ResponsiveContainer>
 

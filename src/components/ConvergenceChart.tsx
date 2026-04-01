@@ -50,10 +50,10 @@ export default function ConvergenceChart({ data }: ConvergenceChartProps) {
 					</span>
 				</div>
 			) : (
-				<ResponsiveContainer width="100%" height="100%">
+				<ResponsiveContainer width="100%" height="100%" debounce={0}>
 					<LineChart
 						data={data}
-						margin={{ top: 4, right: 8, bottom: 0, left: -20 }}
+						margin={{ top: 12, right: 12, bottom: 8, left: 0 }}
 					>
 						<XAxis
 							dataKey="gen"
@@ -62,8 +62,9 @@ export default function ConvergenceChart({ data }: ConvergenceChartProps) {
 								fontSize: 9,
 								fill: "#5c5b57",
 							}}
-							tickLine={false}
-							axisLine={false}
+							tickLine={true}
+							axisLine={true}
+							padding={{ left: 8, right: 8 }}
 						/>
 						<YAxis
 							domain={["auto", "auto"]}
@@ -72,18 +73,21 @@ export default function ConvergenceChart({ data }: ConvergenceChartProps) {
 								fontSize: 9,
 								fill: "#5c5b57",
 							}}
-							tickLine={false}
-							axisLine={false}
+							tickLine={true}
+							axisLine={true}
 							tickFormatter={(v) => v.toFixed(2)}
+							padding={{ top: 8, bottom: 8 }}
 						/>
 						<Tooltip content={<CustomTooltip />} />
 						<Line
 							type="monotone"
 							dataKey="sharpe"
-							stroke="#1d9e75" // --color-green-500
+							stroke="#1d9e75"
 							strokeWidth={1.5}
-							dot={false} // pas de points sur la courbe, plus lisible
+							dot={false}
 							activeDot={{ r: 3, fill: "#3db890" }}
+							isAnimationActive={false}
+							animationDuration={0}
 						/>
 					</LineChart>
 				</ResponsiveContainer>

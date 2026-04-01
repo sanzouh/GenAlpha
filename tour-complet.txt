@@ -30,3 +30,11 @@ On répète 60 fois :
 ─── GÉNÉRATION N+1 ───
 80 nouveaux portefeuilles prêts
 20 élites intacts + 60 enfants améliorés
+
+Fitness Convergence (LineChart): 
+  montre l’amélioration du Sharpe moyen/meilleur génération après génération.
+Pareto Front (ScatterChart):
+   montre le compromis rendement/risque : points gris = population, bleu = non-dominés.
+Le rôle du Pareto est critique: 
+  il montre visuellement quelles solutions “dominées” (moins bonnes sur les deux critères) existent, 
+  et où se situe la frontière optimale. C’est la base d’une décision “choisir le bon couple rendement/risque”.
