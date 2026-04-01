@@ -75,6 +75,7 @@ export default function ParetoChart({
 								}}
 								tickLine={false}
 								axisLine={false}
+								tickFormatter={(v) => `${v.toFixed(1)}%`}
 							/>
 							<YAxis
 								dataKey="expectedReturn"

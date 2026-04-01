@@ -268,7 +268,7 @@ export async function* runGeneticAlgorithm(
 	for (let gen = 0; gen < generations; gen++) {
 		// Pause de 80ms — laisse React re-rendre l'interface entre chaque génération
 		// Sans ce await, la boucle monopolise le thread JS et l'UI se fige
-		await new Promise((r) => setTimeout(r, 80));
+		await new Promise((r) => setTimeout(r, 16));
 
 		// ── ÉTAPE 2 : Évaluation et tri par fitness ──
 		// On recalcule le score de chaque portefeuille et on trie du meilleur au pire

@@ -66,6 +66,7 @@ export default function ConvergenceChart({ data }: ConvergenceChartProps) {
 							axisLine={false}
 						/>
 						<YAxis
+							domain={["auto", "auto"]}
 							tick={{
 								fontFamily: "JetBrains Mono",
 								fontSize: 9,

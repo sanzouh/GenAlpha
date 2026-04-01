@@ -55,30 +55,44 @@ export function useGeneticAlgorithm() {
 		setState(INITIAL_STATE);
 	}, []);
 
-	const start = useCallback(async () => {
+	const start = useCallback(() => {
 		if (state.running) return;
 
 		abortRef.current = false;
 		setState({ ...INITIAL_STATE, running: true });
 
-		for await (const result of runGeneticAlgorithm(params)) {
-			if (abortRef.current) break;
+		const generator = runGeneticAlgorithm(params);
+
+		const tick = async () => {
+			if (abortRef.current) {
+				setState((prev) => ({ ...prev, running: false }));
+				return;
+			}
+
+			const { value, done } = await generator.next();
+
+			if (done || !value) {
+				setState((prev) => ({ ...prev, running: false }));
+				return;
+			}
 
 			setState((prev) => ({
 				...prev,
-				generation: result.generation,
-				progress: result.progress,
-				best: result.best,
-				population: result.population,
-				paretoFront: result.paretoFront,
+				generation: value.generation,
+				progress: value.progress,
+				best: value.best,
+				population: value.population,
+				paretoFront: value.paretoFront,
 				fitnessHistory: [
 					...prev.fitnessHistory,
-					{ gen: result.generation, sharpe: result.best.sharpe },
+					{ gen: value.generation, sharpe: value.best.sharpe },
 				],
 			}));
-		}
 
-		setState((prev) => ({ ...prev, running: false }));
+			setTimeout(tick, 0);
+		};
+
+		tick();
 	}, [params, state.running]);
 
 	const stop = useCallback(() => {
