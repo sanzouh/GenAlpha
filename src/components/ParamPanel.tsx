@@ -1,8 +1,9 @@
 import { Slider } from "@/components/ui/slider";
+import type { GAParams } from "@/lib/geneticAlgorithm";
 
-interface Param {
+interface ParamConfig {
+	key: keyof GAParams;
 	label: string;
-	value: number;
 	min: number;
 	max: number;
 	step: number;
@@ -10,26 +11,26 @@ interface Param {
 	trackClassName?: string;
 }
 
-const params: Param[] = [
+const PARAM_CONFIG: ParamConfig[] = [
 	{
+		key: "populationSize",
 		label: "Population",
-		value: 80,
 		min: 20,
 		max: 200,
 		step: 10,
 		trackClassName: "bg-green-500",
 	},
 	{
-		label: "Générations",
-		value: 60,
+		key: "generations",
+		label: "Generations",
 		min: 20,
-		max: 150,
+		max: 100,
 		step: 10,
 		trackClassName: "bg-green-500",
 	},
 	{
+		key: "crossoverRate",
 		label: "Crossover",
-		value: 75,
 		min: 50,
 		max: 95,
 		step: 5,
@@ -37,17 +38,17 @@ const params: Param[] = [
 		trackClassName: "bg-green-500",
 	},
 	{
+		key: "mutationRate",
 		label: "Mutation",
-		value: 8,
 		min: 1,
-		max: 25,
+		max: 20,
 		step: 1,
 		unit: "%",
 		trackClassName: "bg-amber-500",
 	},
 	{
+		key: "maxRisk",
 		label: "Max Risk",
-		value: 20,
 		min: 5,
 		max: 40,
 		step: 1,
@@ -57,8 +58,8 @@ const params: Param[] = [
 ];
 
 interface ParamPanelProps {
-	values: Record<string, number>;
-	onChange: (label: string, value: number) => void;
+	values: GAParams;
+	onChange: <K extends keyof GAParams>(key: K, value: GAParams[K]) => void;
 }
 
 export default function ParamPanel({ values, onChange }: ParamPanelProps) {
@@ -69,18 +70,18 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 				Algorithm parameters
 			</p>
 
-			{params.map((p, i) => (
+			{PARAM_CONFIG.map((p, i) => (
 				<div
-					key={p.label}
+					key={p.key}
 					className={`flex flex-col gap-2 py-2.5 ${
-						i < params.length - 1 ? "border-b border-gray-100" : ""
+						i < PARAM_CONFIG.length - 1 ? "border-b border-gray-100" : ""
 					}`}
 				>
 					{/* Label + valeur */}
 					<div className="flex items-center justify-between">
 						<span className="text-[13px] text-gray-600">{p.label}</span>
 						<span className="font-mono text-[13px] font-medium text-gray-900">
-							{values[p.label] ?? p.value}
+							{values[p.key]}
 							{p.unit ?? ""}
 						</span>
 					</div>
@@ -90,8 +91,8 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 						min={p.min}
 						max={p.max}
 						step={p.step}
-						defaultValue={[p.value]}
-						onValueChange={([v]) => onChange(p.label, v)}
+						defaultValue={[values[p.key]]}
+						onValueChange={([v]) => onChange(p.key, v)}
 						trackClassName={p.trackClassName}
 						className="w-full"
 					/>
