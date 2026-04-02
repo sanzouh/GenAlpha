@@ -97,7 +97,7 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 						min={p.min}
 						max={p.max}
 						step={p.step}
-						defaultValue={[values[p.key]]}
+						value={[values[p.key]]}
 						onValueChange={([v]) => onChange(p.key, v)}
 						trackClassName={p.trackClassName}
 						className="w-full"

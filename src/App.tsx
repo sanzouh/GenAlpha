@@ -14,9 +14,11 @@ export default function App() {
 		params,
 		updateParam,
 		start,
+		pause,
 		stop,
 		reset,
 		running,
+		paused,
 		generation,
 		best,
 		population,
@@ -37,7 +39,12 @@ export default function App() {
 				<aside className="w-70 shrink-0 flex flex-col gap-3 overflow-y-auto">
 					<ParamPanel values={params} onChange={updateParam} />
 					<AssetList />
-					<LaunchButton running={running} onLaunch={running ? stop : start} />
+					<LaunchButton
+						status={running ? "running" : paused ? "paused" : "idle"}
+						onStart={start}
+						onPause={pause}
+						onResume={start}
+					/>
 					<button
 						onClick={() => {
 							if (running) return;
