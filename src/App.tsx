@@ -15,6 +15,7 @@ export default function App() {
 		updateParam,
 		start,
 		stop,
+		reset,
 		running,
 		generation,
 		best,
@@ -37,6 +38,20 @@ export default function App() {
 					<ParamPanel values={params} onChange={updateParam} />
 					<AssetList />
 					<LaunchButton running={running} onLaunch={running ? stop : start} />
+					<button
+						onClick={() => {
+							if (running) return;
+							reset();
+						}}
+						disabled={running}
+						className={`w-full rounded-lg py-3 font-semibold transition-colors ${
+							running
+								? "bg-gray-300 text-gray-500 cursor-not-allowed"
+								: "bg-gray-300 text-gray-800 hover:bg-gray-400"
+						}`}
+					>
+						Reset optimisation
+					</button>
 				</aside>
 
 				{/* Colonne droite — placeholder */}
