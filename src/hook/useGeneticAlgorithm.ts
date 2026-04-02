@@ -32,6 +32,7 @@ const DEFAULT_PARAMS: GAParams = {
 	crossoverRate: 75,
 	mutationRate: 8,
 	maxRisk: 20,
+	volatilityMode: "markowitz",
 };
 
 // ── Hook ──

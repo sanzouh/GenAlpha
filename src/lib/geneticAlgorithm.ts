@@ -31,6 +31,7 @@ export interface GAParams {
 	crossoverRate: number; // 75 (en %)
 	mutationRate: number; // 8  (en %)
 	maxRisk: number; // 20 (en %)
+	volatilityMode: "markowitz" | "linear"; // // mode de calcul de la volatilité
 }
 
 // Ce que le générateur émet à chaque génération vers l'interface
@@ -88,19 +89,31 @@ export function randomPortfolio(): number[] {
 //
 //  Complexité : O(n) — un seul parcours du tableau
 // ─────────────────────────────────────────────
-export function evaluatePortfolio(weights: number[]): Portfolio {
+export function evaluatePortfolio(
+	weights: number[],
+	mode: "markowitz" | "linear" = "markowitz",
+): Portfolio {
 	let expectedReturn = 0;
 	let volatility = 0;
+	let volatilitySquared = 0;
 
 	ASSETS.forEach((asset, i) => {
 		// Rendement : moyenne pondérée simple
 		// ex: 20% dans AAPL(12.4%) → contribution = 0.20 × 12.4 = 2.48%
 		expectedReturn += weights[i] * asset.expectedReturn;
 
-		// Volatilité : somme pondérée linéaire (démo : dispersion plus visible)
-		// ex: 20% dans AAPL(18.2%) → contribution = 0.20 × 18.2 = 3.64
-		volatility += weights[i] * asset.volatility;
+		if (mode === "linear") {
+			// Volatilité démo (linéaire)
+			volatility += weights[i] * asset.volatility;
+		} else {
+			// Volatilité Markowitz (réaliste)
+			volatilitySquared += weights[i] ** 2 * asset.volatility ** 2;
+		}
 	});
+
+	if (mode === "markowitz") {
+		volatility = Math.sqrt(volatilitySquared);
+	}
 
 	// Ratio de Sharpe : gain au-delà du taux sans risque, par unité de risque
 	// ex: rendement=15%, volatilité=10% → Sharpe = (15-2)/10 = 1.3
@@ -250,14 +263,20 @@ export function getParetoFront(population: Portfolio[]): Portfolio[] {
 export async function* runGeneticAlgorithm(
 	params: GAParams,
 ): AsyncGenerator<GAResult, void, unknown> {
-	const { populationSize, generations, crossoverRate, mutationRate, maxRisk } =
-		params;
+	const {
+		populationSize,
+		generations,
+		crossoverRate,
+		mutationRate,
+		maxRisk,
+		volatilityMode,
+	} = params;
 
 	// ── ÉTAPE 1 : Population initiale ──
 	// On crée populationSize portefeuilles aléatoires et on les évalue immédiatement
 	// Array.from({ length: n }, fn) → crée un tableau de n éléments via fn
 	let population: Portfolio[] = Array.from({ length: populationSize }, () =>
-		evaluatePortfolio(randomPortfolio()),
+		evaluatePortfolio(randomPortfolio(), volatilityMode),
 	);
 
 	for (let gen = 0; gen < generations; gen++) {
@@ -298,7 +317,7 @@ export async function* runGeneticAlgorithm(
 			childWeights = mutate(childWeights, mutationRate);
 
 			// Évaluation du nouvel enfant et ajout à la population
-			newPopulation.push(evaluatePortfolio(childWeights));
+			newPopulation.push(evaluatePortfolio(childWeights, volatilityMode));
 		}
 
 		population = newPopulation;

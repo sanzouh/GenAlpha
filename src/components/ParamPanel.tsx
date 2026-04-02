@@ -1,8 +1,12 @@
 import { Slider } from "@/components/ui/slider";
 import type { GAParams } from "@/lib/geneticAlgorithm";
 
+type NumericGAParamKey = {
+	[K in keyof GAParams]: GAParams[K] extends number ? K : never;
+}[keyof GAParams];
+
 interface ParamConfig {
-	key: keyof GAParams;
+	key: NumericGAParamKey;
 	label: string;
 	min: number;
 	max: number;
@@ -62,6 +66,8 @@ interface ParamPanelProps {
 	onChange: <K extends keyof GAParams>(key: K, value: GAParams[K]) => void;
 }
 
+const VOLATILITY_MODES = ["markowitz", "linear"] as const;
+
 export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 	return (
 		<div className="card flex flex-col gap-1">
@@ -98,6 +104,25 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 					/>
 				</div>
 			))}
+
+			<div className="flex flex-col gap-2 py-2.5 border-b border-gray-100">
+				<div className="flex items-center justify-between">
+					<span className="text-[13px] text-gray-600">Volatility model</span>
+					<select
+						value={values.volatilityMode}
+						onChange={(e) =>
+							onChange("volatilityMode", e.target.value as GAParams["volatilityMode"])
+						}
+						className="rounded border border-gray-300 px-2 py-1 text-sm"
+					>
+						{VOLATILITY_MODES.map((mode) => (
+							<option key={mode} value={mode}>
+								{mode}
+							</option>
+						))}
+					</select>
+				</div>
+			</div>
 
 			{/* Explainer */}
 			<div
