@@ -90,22 +90,17 @@ export function randomPortfolio(): number[] {
 // ─────────────────────────────────────────────
 export function evaluatePortfolio(weights: number[]): Portfolio {
 	let expectedReturn = 0;
-	let volatilitySquared = 0; // on travaille en carré, on prend la racine à la fin
+	let volatility = 0;
 
 	ASSETS.forEach((asset, i) => {
 		// Rendement : moyenne pondérée simple
 		// ex: 20% dans AAPL(12.4%) → contribution = 0.20 × 12.4 = 2.48%
 		expectedReturn += weights[i] * asset.expectedReturn;
 
-		// Volatilité : formule de Markowitz (actifs non-corrélés)
-		// On somme les carrés pondérés, pas les valeurs directes
-		// ex: 20% dans AAPL(18.2%) → contribution = 0.20² × 18.2² = 0.04 × 331.24
-		// Pourquoi les carrés ? Car le risque ne s'additionne pas linéairement
-		volatilitySquared += weights[i] ** 2 * asset.volatility ** 2;
+		// Volatilité : somme pondérée linéaire (démo : dispersion plus visible)
+		// ex: 20% dans AAPL(18.2%) → contribution = 0.20 × 18.2 = 3.64
+		volatility += weights[i] * asset.volatility;
 	});
-
-	// Racine carrée pour revenir en % — c'est la vraie volatilité du portefeuille
-	const volatility = Math.sqrt(volatilitySquared);
 
 	// Ratio de Sharpe : gain au-delà du taux sans risque, par unité de risque
 	// ex: rendement=15%, volatilité=10% → Sharpe = (15-2)/10 = 1.3
@@ -317,7 +312,7 @@ export async function* runGeneticAlgorithm(
 		yield {
 			generation: gen + 1, // 1-indexé pour l'affichage
 			best: evaluated[0], // meilleur portefeuille de la génération
-			population: evaluated.slice(0, 60), // 60 points pour le graphique
+			population: evaluated, // toute la population pour un Pareto fidèle
 			paretoFront,
 			progress: Math.round(((gen + 1) / generations) * 100), // 0 → 100%
 		};
