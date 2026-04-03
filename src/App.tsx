@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Topbar from "./components/Topbar";
 /* import ParamPanel from "./components/ParamPanel"; */
-import AssetList from "./components/AssetList";
+import AssetList from "./components/AssetList/index";
 import LaunchButton from "./components/LaunchButton";
 import MetricsBar from "./components/MetricsBar";
 import ProgressBar from "./components/ProgressBar";
