@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { memo, type FC } from "react";
 import {
 	ScatterChart,
 	Scatter,
@@ -38,7 +38,7 @@ const CustomTooltip: FC<Partial<TooltipContentProps<number, string>>> = ({
 	);
 };
 
-export default function ParetoChart({
+export default memo(function ParetoChart({
 	population,
 	paretoFront,
 }: ParetoChartProps) {
@@ -122,4 +122,4 @@ export default function ParetoChart({
 			)}
 		</div>
 	);
-}
+});

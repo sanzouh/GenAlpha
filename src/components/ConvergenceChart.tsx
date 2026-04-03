@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { memo, type FC } from "react";
 import {
 	LineChart,
 	Line,
@@ -35,7 +35,7 @@ const CustomTooltip: FC<Partial<TooltipContentProps<number, string>>> = ({
 	);
 };
 
-export default function ConvergenceChart({ data }: ConvergenceChartProps) {
+export default memo(function ConvergenceChart({ data }: ConvergenceChartProps) {
 	return (
 		<div className="card flex-1 flex flex-col gap-3 overflow-hidden">
 			<p className="text-[13px] font-semibold uppercase text-gray-900">
@@ -94,4 +94,4 @@ export default function ConvergenceChart({ data }: ConvergenceChartProps) {
 			)}
 		</div>
 	);
-}
+});
