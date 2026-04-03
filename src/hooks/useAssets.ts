@@ -3,6 +3,20 @@ import { ASSETS as DEFAULT_ASSETS } from "@/data/assets";
 import type { Asset } from "@/lib/geneticAlgorithm";
 
 const STORAGE_KEY = "genportfolio:assets";
+const ASSET_COLOR_POOL = [
+	"bg-aapl",
+	"bg-msft",
+	"bg-tsla",
+	"bg-googl",
+	"bg-amzn",
+	"bg-nvda",
+];
+
+function pickAssetColor(used: Set<string>): string {
+	const available = ASSET_COLOR_POOL.filter((c) => !used.has(c));
+	const pool = available.length > 0 ? available : ASSET_COLOR_POOL;
+	return pool[Math.floor(Math.random() * pool.length)];
+}
 
 function loadAssets(): Asset[] {
 	try {
@@ -21,9 +35,10 @@ export function useAssets() {
 	}, [assets]);
 
 	const add = (data: Omit<Asset, "color">) => {
+		const used = new Set(assets.map((a) => a.color));
 		setAssets((prev) => [
 			...prev,
-			{ ...data, color: `bg-${data.ticker.toLowerCase()}` },
+			{ ...data, color: pickAssetColor(used) },
 		]);
 	};
 
