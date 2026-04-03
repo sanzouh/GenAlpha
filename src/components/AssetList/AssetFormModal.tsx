@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Asset } from "@/lib/geneticAlgorithm";
+import type { ReactNode } from "react";
 
 type FormData = Omit<Asset, "color">;
 
@@ -24,7 +25,7 @@ function Field({
 	children,
 }: {
 	label: string;
-	children: React.ReactNode;
+	children: ReactNode;
 }) {
 	return (
 		<div className="flex flex-col gap-1.5">
@@ -47,29 +48,16 @@ export default function AssetFormModal({
 	onSave,
 	onClose,
 }: AssetFormModalProps) {
-	const [form, setForm] = useState<FormData>(
+	const [form, setForm] = useState<FormData>(() =>
 		initial
 			? {
-					ticker: initial.ticker,
-					name: initial.name,
-					expectedReturn: initial.expectedReturn,
-					volatility: initial.volatility,
-				}
+				ticker: initial.ticker,
+				name: initial.name,
+				expectedReturn: initial.expectedReturn,
+				volatility: initial.volatility,
+			}
 			: EMPTY,
 	);
-
-	useEffect(() => {
-		setForm(
-			initial
-				? {
-						ticker: initial.ticker,
-						name: initial.name,
-						expectedReturn: initial.expectedReturn,
-						volatility: initial.volatility,
-					}
-				: EMPTY,
-		);
-	}, [initial, mode]);
 
 	const set = <K extends keyof FormData>(key: K, value: FormData[K]) =>
 		setForm((prev) => ({ ...prev, [key]: value }));

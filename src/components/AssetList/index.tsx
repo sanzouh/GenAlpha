@@ -46,11 +46,12 @@ export default function AssetList() {
 
 			{/* Modals */}
 			{modal.type === "add" && (
-				<AssetFormModal mode="add" onSave={add} onClose={close} />
+				<AssetFormModal key="add" mode="add" onSave={add} onClose={close} />
 			)}
 
 			{modal.type === "edit" && (
 				<AssetFormModal
+					key={`edit-${modal.asset.ticker}`}
 					mode="edit"
 					initial={modal.asset}
 					onSave={(data) => edit(modal.asset.ticker, data)}
