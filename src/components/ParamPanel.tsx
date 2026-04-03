@@ -111,7 +111,10 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 					<select
 						value={values.volatilityMode}
 						onChange={(e) =>
-							onChange("volatilityMode", e.target.value as GAParams["volatilityMode"])
+							onChange(
+								"volatilityMode",
+								e.target.value as GAParams["volatilityMode"],
+							)
 						}
 						className="rounded border border-gray-300 px-2 py-1 text-sm"
 					>
@@ -133,6 +136,18 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 					High crossover → rapid combination of effective solutions. High
 					mutation → exploration but risk of divergence.
 				</p>
+				<div className="mt-2 pt-2 border-t border-purple-200/50">
+					<p className="text-[11px] text-gray-700 font-medium">
+						Max Risk = {values.maxRisk}%:
+					</p>
+					<p className="text-[10px] text-gray-600 leading-relaxed">
+						{values.maxRisk <= 15
+							? "Conservative: prioritizes low-risk portfolios, may limit high-return opportunities."
+							: values.maxRisk <= 25
+								? "Balanced: allows moderate risk for better returns, good for most investors."
+								: "Aggressive: explores high-risk portfolios, maximizes potential returns but increases volatility."}
+					</p>
+				</div>
 			</div>
 		</div>
 	);
