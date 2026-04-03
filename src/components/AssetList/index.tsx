@@ -29,7 +29,7 @@ export default function AssetList() {
 					<Button
 						variant="outline"
 						size="sm"
-						className="h-7 px-2 text-[11px] gap-1"
+						className="h-8 px-4 text-[11px] gap-1"
 						onClick={() => setModal({ type: "add" })}
 					>
 						<Plus size={12} />

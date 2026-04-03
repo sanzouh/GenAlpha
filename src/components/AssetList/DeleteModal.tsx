@@ -14,8 +14,14 @@ export default function DeleteModal({
 	onCancel,
 }: DeleteModalProps) {
 	return (
-		<div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-			<div className="bg-elevated border border-gray-200 rounded-lg p-6 w-80">
+		<div
+			className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+			onClick={onCancel}
+		>
+			<div
+				className="bg-elevated border border-gray-200 rounded-lg p-6 w-80"
+				onClick={(e) => e.stopPropagation()}
+			>
 				<div className="flex items-center gap-3 mb-4">
 					<div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
 						<Trash2 size={14} className="text-red-500" />

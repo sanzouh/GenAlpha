@@ -20,13 +20,7 @@ const EMPTY: FormData = {
 	volatility: 0,
 };
 
-function Field({
-	label,
-	children,
-}: {
-	label: string;
-	children: ReactNode;
-}) {
+function Field({ label, children }: { label: string; children: ReactNode }) {
 	return (
 		<div className="flex flex-col gap-1.5">
 			<label className="text-[11px] font-medium text-gray-600 uppercase tracking-wide">
@@ -51,11 +45,11 @@ export default function AssetFormModal({
 	const [form, setForm] = useState<FormData>(() =>
 		initial
 			? {
-				ticker: initial.ticker,
-				name: initial.name,
-				expectedReturn: initial.expectedReturn,
-				volatility: initial.volatility,
-			}
+					ticker: initial.ticker,
+					name: initial.name,
+					expectedReturn: initial.expectedReturn,
+					volatility: initial.volatility,
+				}
 			: EMPTY,
 	);
 
@@ -69,8 +63,14 @@ export default function AssetFormModal({
 		form.volatility > 0;
 
 	return (
-		<div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-			<div className="bg-elevated border border-gray-200 rounded-lg p-6 w-96">
+		<div
+			className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+			onClick={onClose}
+		>
+			<div
+				className="bg-elevated border border-gray-200 rounded-lg p-6 w-96"
+				onClick={(e) => e.stopPropagation()}
+			>
 				{/* Header */}
 				<div className="flex items-center justify-between mb-5">
 					<h3 className="text-[14px] font-semibold text-gray-900">
