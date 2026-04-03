@@ -8,7 +8,25 @@ const tickers = [
 	{ symbol: "GOOGL", value: "+0.51%", positive: true },
 ];
 
-export default function Topbar() {
+interface TopbarProps {
+	status: "ready" | "optimizing" | "paused";
+}
+
+export default function Topbar({ status }: TopbarProps) {
+	const statusLabel =
+		status === "optimizing"
+			? "Optimizing..."
+			: status === "paused"
+				? "Paused"
+				: "Ready to start";
+
+	const statusClass =
+		status === "optimizing"
+			? "bg-green-500 text-white"
+			: status === "paused"
+				? "bg-blue-500 text-white"
+				: "bg-gray-300 text-gray-700";
+
 	return (
 		<header
 			className="h-13 bg-surface border-b
@@ -37,6 +55,11 @@ export default function Topbar() {
 
 			{/* Right */}
 			<div className="flex items-center gap-3">
+				<div
+					className={`px-2 py-1 rounded-full text-[10px] font-medium ${statusClass}`}
+				>
+					{statusLabel}
+				</div>
 				<span className="text-[12px] text-gray-600">Dark</span>
 				<div
 					className="w-8 h-8 rounded-full bg-elevated

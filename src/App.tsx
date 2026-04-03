@@ -32,9 +32,11 @@ export default function App() {
 		document.documentElement.classList.add("dark");
 	}, []);
 
+	const topbarStatus = running ? "optimizing" : paused ? "paused" : "ready";
+
 	return (
 		<div className="h-screen flex flex-col bg-base text-gray-900 overflow-hidden">
-			<Topbar />
+			<Topbar status={topbarStatus} />
 
 			<div className="flex flex-1 gap-4 p-4 overflow-hidden">
 				{/* Colonne gauche */}
