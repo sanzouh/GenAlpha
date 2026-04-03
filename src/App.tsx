@@ -66,6 +66,8 @@ export default function App() {
 						sharpe={best?.sharpe ?? null}
 						generation={generation}
 						maxGenerations={params.generations}
+						populationSize={population.length}
+						paretoSize={paretoFront.length}
 					/>
 					<ProgressBar
 						generation={generation}

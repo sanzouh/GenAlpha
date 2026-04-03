@@ -4,6 +4,8 @@ interface MetricsBarProps {
 	sharpe: number | null;
 	generation: number;
 	maxGenerations: number;
+	populationSize: number;
+	paretoSize: number;
 }
 
 // Cercle de progression SVG pour la génération
@@ -71,6 +73,8 @@ export default function MetricsBar({
 	sharpe,
 	generation,
 	maxGenerations,
+	populationSize,
+	paretoSize,
 }: MetricsBarProps) {
 	// Tant que l'algo n'a pas tourné, on affiche "—"
 	const fmt = (v: number | null, decimals: number, suffix = "") =>
@@ -103,6 +107,11 @@ export default function MetricsBar({
 				{/* Le ring SVG s'affiche uniquement quand l'algo tourne */}
 				<GenerationRing current={generation} max={maxGenerations} />
 			</MetricCard>
+			<MetricCard
+				label="Population / Pareto"
+				value={`${populationSize} / ${paretoSize}`}
+				valueClass="text-purple-400"
+			/>
 		</div>
 	);
 }
