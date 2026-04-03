@@ -8,6 +8,8 @@ import ProgressBar from "./components/ProgressBar";
 import ConvergenceChart from "./components/ConvergenceChart";
 import ParetoChart from "./components/ParetoChart";
 import { useGeneticAlgorithm } from "./hook/useGeneticAlgorithm";
+import { RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function App() {
 	const {
@@ -15,7 +17,7 @@ export default function App() {
 		updateParam,
 		start,
 		pause,
-		stop,
+		/* stop, */
 		reset,
 		running,
 		paused,
@@ -45,20 +47,15 @@ export default function App() {
 						onPause={pause}
 						onResume={start}
 					/>
-					<button
-						onClick={() => {
-							if (running) return;
-							reset();
-						}}
+					<Button
+						variant="outline"
+						onClick={reset}
 						disabled={running}
-						className={`w-full rounded-lg py-3 font-semibold transition-colors ${
-							running
-								? "bg-gray-300 text-gray-500 cursor-not-allowed"
-								: "bg-gray-300 text-gray-800 hover:bg-gray-400"
-						}`}
+						className="w-full h-10 text-[14px] font-semibold gap-2"
 					>
-						Reset optimisation
-					</button>
+						<RotateCcw size={15} strokeWidth={2} />
+						Reset
+					</Button>
 				</aside>
 
 				{/* Colonne droite — placeholder */}

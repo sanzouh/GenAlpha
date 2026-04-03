@@ -50,7 +50,7 @@ export default function ParetoChart({
 					Pareto Front
 				</p>
 				<span className="pill-academic">Multicriteria</span>
-				<span className="pill bg-gray-100/10 text-gray-600 border-gray-200/20">
+				<span className="pill bg-gray-300/10 text-gray-600 border-gray-200/20">
 					Non-dominated
 				</span>
 			</div>
