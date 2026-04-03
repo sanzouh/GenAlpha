@@ -1,11 +1,10 @@
+import { useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import type { GAParams } from "@/lib/geneticAlgorithm";
 import {
 	Select,
 	SelectContent,
-	/* SelectGroup, */
 	SelectItem,
-	/* SelectLabel, */
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
@@ -22,6 +21,7 @@ interface ParamConfig {
 	step: number;
 	unit?: string;
 	trackClassName?: string;
+	explain: (v: number) => string;
 }
 
 const PARAM_CONFIG: ParamConfig[] = [
@@ -32,6 +32,12 @@ const PARAM_CONFIG: ParamConfig[] = [
 		max: 200,
 		step: 10,
 		trackClassName: "bg-green-500",
+		explain: (v) =>
+			v <= 40
+				? "Small population — fast but may miss good solutions."
+				: v <= 100
+					? "Balanced size — good diversity and speed."
+					: "Large population — thorough search, slower per generation.",
 	},
 	{
 		key: "generations",
@@ -40,6 +46,12 @@ const PARAM_CONFIG: ParamConfig[] = [
 		max: 100,
 		step: 10,
 		trackClassName: "bg-green-500",
+		explain: (v) =>
+			v <= 30
+				? "Few generations — quick result, may not fully converge."
+				: v <= 60
+					? "Standard run — enough time to find good solutions."
+					: "Long run — maximizes convergence, takes more time.",
 	},
 	{
 		key: "crossoverRate",
@@ -49,6 +61,10 @@ const PARAM_CONFIG: ParamConfig[] = [
 		step: 5,
 		unit: "%",
 		trackClassName: "bg-green-500",
+		explain: (v) =>
+			v >= 80
+				? "High crossover — fast convergence but narrow exploration."
+				: "Balanced blend — combines solutions while keeping diversity.",
 	},
 	{
 		key: "mutationRate",
@@ -58,6 +74,10 @@ const PARAM_CONFIG: ParamConfig[] = [
 		step: 1,
 		unit: "%",
 		trackClassName: "bg-amber-500",
+		explain: (v) =>
+			v >= 10
+				? "High mutation — discovers new portfolios, risk of instability."
+				: "Conservative — fine-tunes existing solutions steadily.",
 	},
 	{
 		key: "maxRisk",
@@ -67,124 +87,107 @@ const PARAM_CONFIG: ParamConfig[] = [
 		step: 1,
 		unit: "%",
 		trackClassName: "bg-red-500",
+		explain: (v) =>
+			v <= 15
+				? "Conservative — prioritizes stability over returns."
+				: v <= 25
+					? "Balanced — moderate risk for better returns."
+					: "Aggressive — maximizes returns, accepts high volatility.",
 	},
 ];
+
+const VOLATILITY_EXPLAIN: Record<GAParams["volatilityMode"], string> = {
+	markowitz: "Markowitz model — realistic risk modeling, ideal for analysis.",
+	linear: "Simplified model — more dispersed results, ideal for exploration.",
+};
 
 interface ParamPanelProps {
 	values: GAParams;
 	onChange: <K extends keyof GAParams>(key: K, value: GAParams[K]) => void;
 }
 
-const VOLATILITY_MODES = ["markowitz", "linear"] as const;
-
 export default function ParamPanel({ values, onChange }: ParamPanelProps) {
+	const [activeKey, setActiveKey] = useState<
+		NumericGAParamKey | "volatilityMode" | null
+	>(null);
+
+	const explanation = (() => {
+		if (!activeKey) return "Hover or move a slider to see guidance.";
+		if (activeKey === "volatilityMode")
+			return VOLATILITY_EXPLAIN[values.volatilityMode];
+		const config = PARAM_CONFIG.find((p) => p.key === activeKey);
+		return config?.explain(values[activeKey]) ?? "";
+	})();
+
 	return (
 		<div className="card flex flex-col gap-1">
-			{/* Header */}
-			<p className="text-[13px] font-semibold uppercase text-gray-900">
-				Algorithm parameters
+			<p className="text-[13px] font-semibold uppercase text-gray-900 mb-1">
+				Algorithm Parameters
 			</p>
 
 			{PARAM_CONFIG.map((p, i) => (
 				<div
 					key={p.key}
-					className={`flex flex-col gap-2 py-2.5 ${
+					className={`flex flex-col gap-2 py-2 ${
 						i < PARAM_CONFIG.length - 1 ? "border-b border-gray-100" : ""
 					}`}
+					onMouseEnter={() => setActiveKey(p.key)}
+					onMouseLeave={() => setActiveKey(null)}
 				>
-					{/* Label + valeur */}
 					<div className="flex items-center justify-between">
-						<span className="text-[13px] text-gray-600">{p.label}</span>
-						<span className="font-mono text-[13px] font-medium text-gray-900">
+						<span className="text-[12px] text-gray-600">{p.label}</span>
+						<span className="font-mono text-[12px] font-medium text-gray-900">
 							{values[p.key]}
 							{p.unit ?? ""}
 						</span>
 					</div>
-
-					{/* Slider shadcn customisé */}
 					<Slider
 						min={p.min}
 						max={p.max}
 						step={p.step}
 						value={[values[p.key]]}
-						onValueChange={([v]) => onChange(p.key, v)}
+						onValueChange={([v]) => {
+							onChange(p.key, v);
+							setActiveKey(p.key);
+						}}
 						trackClassName={p.trackClassName}
 						className="w-full"
 					/>
 				</div>
 			))}
 
-			<div className="flex flex-col gap-2 py-2.5 border-b border-gray-100">
-				<div className="flex items-center justify-between">
-					<span className="text-[13px] text-gray-600">Volatility model</span>
-					<Select
-						value={values.volatilityMode}
-						onValueChange={(v) =>
-							onChange("volatilityMode", v as GAParams["volatilityMode"])
-						}
-					>
-						<SelectTrigger className="w-32 h-7 text-[12px] bg-elevated border-gray-300/50">
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent className="bg-elevated border-gray-300/50">
-							{VOLATILITY_MODES.map((mode) => (
-								<SelectItem key={mode} value={mode} className="text-[12px]">
-									{mode}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-				</div>
+			{/* Volatility mode */}
+			<div
+				className="flex items-center justify-between py-2 border-t border-gray-100"
+				onMouseEnter={() => setActiveKey("volatilityMode")}
+				onMouseLeave={() => setActiveKey(null)}
+			>
+				<span className="text-[12px] text-gray-600">Volatility model</span>
+				<Select
+					value={values.volatilityMode}
+					onValueChange={(v) =>
+						onChange("volatilityMode", v as GAParams["volatilityMode"])
+					}
+				>
+					<SelectTrigger className="w-28 h-7 text-[11px] bg-elevated border-gray-300/50">
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent className="bg-elevated border-gray-300/50">
+						<SelectItem value="markowitz" className="text-[11px]">
+							markowitz
+						</SelectItem>
+						<SelectItem value="linear" className="text-[11px]">
+							linear
+						</SelectItem>
+					</SelectContent>
+				</Select>
 			</div>
 
-			{/* Explainer */}
-			<div
-				className="mt-3 rounded-sm border border-purple-300/30
-                      bg-purple-100 px-3 py-2.5 space-y-2"
-			>
-				<div className="space-y-1">
-					<p className="text-[11px] text-gray-700 font-medium">
-						Crossover {values.crossoverRate}% (Inheritance)
-					</p>
-					<p className="text-[10px] text-gray-600 leading-relaxed">
-						{values.crossoverRate >= 80
-							? "Strong focus on proven solutions. Like picking the best from top performers—fast convergence but narrow scope."
-							: "Balanced blend. Combines strengths of different solutions—explores while building on success."}
-					</p>
-				</div>
-
-				<div className="space-y-1 pt-2 border-t border-purple-200/50">
-					<p className="text-[11px] text-gray-700 font-medium">
-						Mutation {values.mutationRate}% (Innovation)
-					</p>
-					<p className="text-[10px] text-gray-600 leading-relaxed">
-						{values.mutationRate >= 10
-							? "Aggressive random changes. Discovers completely new portfolios—higher risk of instability but finds breakthrough solutions."
-							: "Conservative tweaks. Fine-tunes existing solutions slightly—stable, predictable improvements."}
-					</p>
-				</div>
-				<div className="mt-2 pt-2 border-t border-purple-200/50">
-					<p className="text-[11px] text-gray-700 font-medium">
-						Max Risk = {values.maxRisk}%:
-					</p>
-					<p className="text-[10px] text-gray-600 leading-relaxed">
-						{values.maxRisk <= 15
-							? "Conservative: prioritizes low-risk portfolios, may limit high-return opportunities."
-							: values.maxRisk <= 25
-								? "Balanced: allows moderate risk for better returns, good for most investors."
-								: "Aggressive: explores high-risk portfolios, maximizes potential returns but increases volatility."}
-					</p>
-				</div>
-				<div className="mt-2 pt-2 border-t border-purple-200/50">
-					<p className="text-[11px] text-gray-700 font-medium">
-						Volatility Model: {values.volatilityMode}
-					</p>
-					<p className="text-[10px] text-gray-600 leading-relaxed">
-						{values.volatilityMode === "markowitz"
-							? "Markowitz (classical): Uses correlation matrix for realistic portfolio behavior. Best for academic/theoretical analysis."
-							: "Linear (simplified): Direct asset variance sum. Produces more dispersed, varied portfolios—ideal for exploration."}
-					</p>
-				</div>
+			{/* Zone d'explication unique — dynamique */}
+			<div className="mt-1 rounded-sm border border-purple-300/30 bg-purple-100 px-3 py-2">
+				<p className="text-[10px] text-gray-600 leading-relaxed italic transition-all duration-150">
+					{explanation}
+				</p>
 			</div>
 		</div>
 	);
