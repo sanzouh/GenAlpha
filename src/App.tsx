@@ -1,20 +1,20 @@
 import { useEffect } from "react";
 import Topbar from "./components/Topbar";
-import ParamPanel from "./components/ParamPanel";
+/* import ParamPanel from "./components/ParamPanel"; */
 import AssetList from "./components/AssetList";
 import LaunchButton from "./components/LaunchButton";
 import MetricsBar from "./components/MetricsBar";
 import ProgressBar from "./components/ProgressBar";
 import ConvergenceChart from "./components/ConvergenceChart";
 import ParetoChart from "./components/ParetoChart";
-import { useGeneticAlgorithm } from "./hook/useGeneticAlgorithm";
+import { useGeneticAlgorithm } from "./hooks/useGeneticAlgorithm";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function App() {
 	const {
 		params,
-		updateParam,
+		/* updateParam, */
 		start,
 		pause,
 		/* stop, */
@@ -40,8 +40,8 @@ export default function App() {
 
 			<div className="flex flex-1 gap-4 p-4 overflow-hidden">
 				{/* Colonne gauche */}
-				<aside className="w-70 shrink-0 flex flex-col gap-3 overflow-y-auto">
-					<ParamPanel values={params} onChange={updateParam} />
+				<aside className="w-96 shrink-0 flex flex-col gap-3 overflow-y-hidden">
+					{/* <ParamPanel values={params} onChange={updateParam} /> */}
 					<AssetList />
 					<LaunchButton
 						status={running ? "running" : paused ? "paused" : "idle"}
