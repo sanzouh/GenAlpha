@@ -1,5 +1,14 @@
 import { Slider } from "@/components/ui/slider";
 import type { GAParams } from "@/lib/geneticAlgorithm";
+import {
+	Select,
+	SelectContent,
+	/* SelectGroup, */
+	SelectItem,
+	/* SelectLabel, */
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 
 type NumericGAParamKey = {
 	[K in keyof GAParams]: GAParams[K] extends number ? K : never;
@@ -108,22 +117,23 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 			<div className="flex flex-col gap-2 py-2.5 border-b border-gray-100">
 				<div className="flex items-center justify-between">
 					<span className="text-[13px] text-gray-600">Volatility model</span>
-					<select
+					<Select
 						value={values.volatilityMode}
-						onChange={(e) =>
-							onChange(
-								"volatilityMode",
-								e.target.value as GAParams["volatilityMode"],
-							)
+						onValueChange={(v) =>
+							onChange("volatilityMode", v as GAParams["volatilityMode"])
 						}
-						className="rounded border border-gray-300 px-2 py-1 text-sm"
 					>
-						{VOLATILITY_MODES.map((mode) => (
-							<option key={mode} value={mode}>
-								{mode}
-							</option>
-						))}
-					</select>
+						<SelectTrigger className="w-32 h-7 text-[12px] bg-elevated border-gray-300/50">
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent className="bg-elevated border-gray-300/50">
+							{VOLATILITY_MODES.map((mode) => (
+								<SelectItem key={mode} value={mode} className="text-[12px]">
+									{mode}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
 				</div>
 			</div>
 
