@@ -21,8 +21,8 @@ export default function AssetList() {
 
 	return (
 		<>
-			<div className="card flex flex-col gap-3">
-				<div className="flex items-center justify-between">
+			<div className="bg-surface border border-gray-200 rounded-xl p-3 flex flex-col gap-3 h-full">
+				<div className="flex items-center justify-between shrink-0">
 					<p className="text-[13px] font-semibold uppercase text-gray-900">
 						Assets
 					</p>
@@ -37,11 +37,13 @@ export default function AssetList() {
 					</Button>
 				</div>
 
-				<AssetTable
-					assets={assets}
-					onEdit={(asset) => setModal({ type: "edit", asset })}
-					onDelete={(asset) => setModal({ type: "delete", asset })}
-				/>
+				<div className="flex-1 min-h-0 overflow-y-auto pr-1">
+					<AssetTable
+						assets={assets}
+						onEdit={(asset) => setModal({ type: "edit", asset })}
+						onDelete={(asset) => setModal({ type: "delete", asset })}
+					/>
+				</div>
 			</div>
 
 			{/* Modals */}
