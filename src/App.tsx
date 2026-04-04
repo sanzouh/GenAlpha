@@ -5,6 +5,7 @@ import AssetList from "./components/AssetList/index";
 import LaunchButton from "./components/LaunchButton";
 import MetricsBar from "./components/MetricsBar";
 import ProgressBar from "./components/ProgressBar";
+import ResultsBanner from "./components/ResultsBanner";
 import ConvergenceChart from "./components/ConvergenceChart";
 import ParetoChart from "./components/ParetoChart";
 import { useGeneticAlgorithm } from "./hooks/useGeneticAlgorithm";
@@ -79,13 +80,17 @@ export default function App() {
 						populationSize={population.length}
 						paretoSize={paretoFront.length}
 					/>
-					<ProgressBar
-						generation={generation}
-						maxGenerations={params.generations}
-						populationSize={params.populationSize}
-						crossover={params.crossoverRate}
-						mutation={params.mutationRate}
-					/>
+					{!running && !paused && best && generation > 0 ? (
+						<ResultsBanner paretoSize={paretoFront.length} />
+					) : (
+						<ProgressBar
+							generation={generation}
+							maxGenerations={params.generations}
+							populationSize={params.populationSize}
+							crossover={params.crossoverRate}
+							mutation={params.mutationRate}
+						/>
+					)}
 					<div className="flex flex-1 gap-3 overflow-hidden">
 						<ConvergenceChart data={fitnessHistory} />
 						<ParetoChart population={population} paretoFront={paretoFront} />
