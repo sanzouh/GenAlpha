@@ -213,11 +213,15 @@ export function mutate(weights: number[], mutationRate: number): number[] {
 
 // Non exportée — utilitaire interne utilisé uniquement par getParetoFront
 function dominates(a: Portfolio, b: Portfolio): boolean {
+	const EPS = 0.01; // 0.01 point de pourcentage de tolérance
+
 	return (
-		a.expectedReturn >= b.expectedReturn && // condition 1
-		a.volatility <= b.volatility && // condition 2
-		(a.expectedReturn > b.expectedReturn || // strictement meilleur sur le rendement
-			a.volatility < b.volatility) // OU strictement meilleur sur le risque
+		a.expectedReturn >= b.expectedReturn - EPS &&
+		a.volatility <= b.volatility + EPS &&
+		(
+			a.expectedReturn > b.expectedReturn + EPS ||
+			a.volatility < b.volatility - EPS
+		)
 	);
 }
 
