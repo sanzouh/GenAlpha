@@ -120,15 +120,15 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 	})();
 
 	return (
-		<div className="card flex flex-col gap-1">
-			<p className="text-[13px] font-semibold uppercase text-gray-900 mb-1">
+		<div className="card flex flex-col gap-1 p-2 max-h-70 min-h-0 overflow-hidden">
+			<p className="text-[11px] font-semibold uppercase text-gray-900 mb-1">
 				Algorithm Parameters
 			</p>
 
 			{PARAM_CONFIG.map((p, i) => (
 				<div
 					key={p.key}
-					className={`flex flex-col gap-2 py-2 ${
+					className={`flex flex-col gap-1 py-1 ${
 						i < PARAM_CONFIG.length - 1 ? "border-b border-gray-100" : ""
 					}`}
 					onMouseEnter={() => setActiveKey(p.key)}
@@ -158,7 +158,7 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 
 			{/* Volatility mode */}
 			<div
-				className="flex items-center justify-between py-2 border-t border-gray-100"
+				className="flex items-center justify-between py-1 border-t border-gray-100"
 				onMouseEnter={() => setActiveKey("volatilityMode")}
 				onMouseLeave={() => setActiveKey(null)}
 			>
@@ -169,10 +169,10 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 						onChange("volatilityMode", v as GAParams["volatilityMode"])
 					}
 				>
-					<SelectTrigger className="w-28 h-7 text-[11px] bg-elevated border-gray-300/50">
+					<SelectTrigger className="w-28 h-7 text-[11px] bg-elevated border-gray-300/40">
 						<SelectValue />
 					</SelectTrigger>
-					<SelectContent className="bg-elevated border-gray-300/50">
+					<SelectContent className="bg-elevated border-gray-300/40">
 						<SelectItem value="markowitz" className="text-[11px]">
 							markowitz
 						</SelectItem>
@@ -184,8 +184,8 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 			</div>
 
 			{/* Zone d'explication unique — dynamique */}
-			<div className="mt-1 rounded-sm border border-purple-300/30 bg-purple-100 px-3 py-2">
-				<p className="text-[10px] text-gray-600 leading-relaxed italic transition-all duration-150">
+			<div className="mt-1 rounded-sm border border-purple-300/30 bg-purple-100 px-2 py-1">
+				<p className="text-[9px] text-gray-600 leading-relaxed italic transition-all duration-150">
 					{explanation}
 				</p>
 			</div>

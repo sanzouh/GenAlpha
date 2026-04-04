@@ -40,24 +40,32 @@ export default function App() {
 
 			<div className="flex flex-1 gap-4 p-4 overflow-hidden">
 				{/* Colonne gauche */}
-				<aside className="w-96 shrink-0 flex flex-col gap-3 overflow-y-auto">
-					<ParamPanel values={params} onChange={updateParam} />
-					<AssetList />
-					<LaunchButton
-						status={running ? "running" : paused ? "paused" : "idle"}
-						onStart={start}
-						onPause={pause}
-						onResume={start}
-					/>
-					<Button
-						variant="outline"
-						onClick={reset}
-						disabled={running}
-						className="w-full h-10 text-[14px] font-semibold gap-2"
-					>
-						<RotateCcw size={15} strokeWidth={2} />
-						Reset
-					</Button>
+				<aside className="w-80 shrink-0 flex flex-col gap-2 overflow-hidden h-full">
+					<div className="shrink-0">
+						<ParamPanel values={params} onChange={updateParam} />
+					</div>
+
+					<div className="flex-1 min-h-0 overflow-y-auto">
+						<AssetList />
+					</div>
+
+					<div className="shrink-0 flex flex-col gap-2">
+						<LaunchButton
+							status={running ? "running" : paused ? "paused" : "idle"}
+							onStart={start}
+							onPause={pause}
+							onResume={start}
+						/>
+						<Button
+							variant="outline"
+							onClick={reset}
+							disabled={running}
+							className="w-full h-10 text-[14px] font-semibold gap-2"
+						>
+							<RotateCcw size={15} strokeWidth={2} />
+							Reset
+						</Button>
+					</div>
 				</aside>
 
 				{/* Colonne droite — placeholder */}
