@@ -45,7 +45,7 @@ export default function App() {
 						<ParamPanel values={params} onChange={updateParam} />
 					</div>
 
-					<div className="flex-1 min-h-0 overflow-y-auto">
+					<div className="flex-1 min-h-0 overflow-y-auto p-1">
 						<AssetList />
 					</div>
 

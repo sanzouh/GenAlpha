@@ -37,7 +37,7 @@ const PARAM_CONFIG: ParamConfig[] = [
 				? "Small population — fast but may miss good solutions."
 				: v <= 100
 					? "Balanced size — good diversity and speed."
-					: "Large population — thorough search, slower per generation.",
+					: "Large — thorough search, slower per generation.",
 	},
 	{
 		key: "generations",
@@ -63,8 +63,8 @@ const PARAM_CONFIG: ParamConfig[] = [
 		trackClassName: "bg-green-500",
 		explain: (v) =>
 			v >= 80
-				? "High crossover — fast convergence but narrow exploration."
-				: "Balanced blend — combines solutions while keeping diversity.",
+				? "High — fast convergence but narrow exploration."
+				: "Balanced — combines solutions while keeping diversity.",
 	},
 	{
 		key: "mutationRate",
@@ -76,7 +76,7 @@ const PARAM_CONFIG: ParamConfig[] = [
 		trackClassName: "bg-amber-500",
 		explain: (v) =>
 			v >= 10
-				? "High mutation — discovers new portfolios, risk of instability."
+				? "High — discovers new portfolios, risk of instability."
 				: "Conservative — fine-tunes existing solutions steadily.",
 	},
 	{
@@ -97,8 +97,8 @@ const PARAM_CONFIG: ParamConfig[] = [
 ];
 
 const VOLATILITY_EXPLAIN: Record<GAParams["volatilityMode"], string> = {
-	markowitz: "Markowitz model — realistic risk modeling, ideal for analysis.",
-	linear: "Simplified model — more dispersed results, ideal for exploration.",
+	markowitz: "Realistic risk modeling, ideal for analysis.",
+	linear: "More dispersed results, ideal for exploration.",
 };
 
 interface ParamPanelProps {
@@ -120,63 +120,64 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 	})();
 
 	return (
-		<div className="card flex flex-col gap-1 p-2 max-h-70 min-h-0 overflow-hidden">
-			<p className="text-[11px] font-semibold uppercase text-gray-900 mb-1">
+		<div className="card flex flex-col gap-2 p-3">
+			<p className="text-[12px] font-semibold uppercase text-gray-900 mb-2">
 				Algorithm Parameters
 			</p>
 
-			{PARAM_CONFIG.map((p, i) => (
-				<div
-					key={p.key}
-					className={`flex flex-col gap-1 py-1 ${
-						i < PARAM_CONFIG.length - 1 ? "border-b border-gray-100" : ""
-					}`}
-					onMouseEnter={() => setActiveKey(p.key)}
-					onMouseLeave={() => setActiveKey(null)}
-				>
-					<div className="flex items-center justify-between">
-						<span className="text-[12px] text-gray-600">{p.label}</span>
-						<span className="font-mono text-[12px] font-medium text-gray-900">
-							{values[p.key]}
-							{p.unit ?? ""}
-						</span>
+			{/* Grid 3x2 pour les sliders */}
+			<div className="grid grid-cols-2 gap-3">
+				{PARAM_CONFIG.map((p) => (
+					<div
+						key={p.key}
+						className="flex flex-col gap-1"
+						onMouseEnter={() => setActiveKey(p.key)}
+						onMouseLeave={() => setActiveKey(null)}
+					>
+						<div className="flex items-center justify-between">
+							<span className="text-[11px] text-gray-600">{p.label}</span>
+							<span className="font-mono text-[11px] font-medium text-gray-900">
+								{values[p.key]}
+								{p.unit ?? ""}
+							</span>
+						</div>
+						<Slider
+							min={p.min}
+							max={p.max}
+							step={p.step}
+							value={[values[p.key]]}
+							onValueChange={([v]) => {
+								onChange(p.key, v);
+								setActiveKey(p.key);
+							}}
+							trackClassName={p.trackClassName}
+							className="w-full"
+						/>
 					</div>
-					<Slider
-						min={p.min}
-						max={p.max}
-						step={p.step}
-						value={[values[p.key]]}
-						onValueChange={([v]) => {
-							onChange(p.key, v);
-							setActiveKey(p.key);
-						}}
-						trackClassName={p.trackClassName}
-						className="w-full"
-					/>
-				</div>
-			))}
+				))}
+			</div>
 
 			{/* Volatility mode */}
 			<div
-				className="flex items-center justify-between py-1 border-t border-gray-100"
+				className="flex items-center justify-between py-2 border-t border-gray-100 mt-2"
 				onMouseEnter={() => setActiveKey("volatilityMode")}
 				onMouseLeave={() => setActiveKey(null)}
 			>
-				<span className="text-[12px] text-gray-600">Volatility model</span>
+				<span className="text-[11px] text-gray-600">Volatility model</span>
 				<Select
 					value={values.volatilityMode}
 					onValueChange={(v) =>
 						onChange("volatilityMode", v as GAParams["volatilityMode"])
 					}
 				>
-					<SelectTrigger className="w-28 h-7 text-[11px] bg-elevated border-gray-300/40">
+					<SelectTrigger className="w-28 h-7 text-[10px] bg-elevated border-gray-300/40">
 						<SelectValue />
 					</SelectTrigger>
 					<SelectContent className="bg-elevated border-gray-300/40">
-						<SelectItem value="markowitz" className="text-[11px]">
+						<SelectItem value="markowitz" className="text-[10px]">
 							markowitz
 						</SelectItem>
-						<SelectItem value="linear" className="text-[11px]">
+						<SelectItem value="linear" className="text-[10px]">
 							linear
 						</SelectItem>
 					</SelectContent>
@@ -184,8 +185,8 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 			</div>
 
 			{/* Zone d'explication unique — dynamique */}
-			<div className="mt-1 rounded-sm border border-purple-300/30 bg-purple-100 px-2 py-1">
-				<p className="text-[9px] text-gray-600 leading-relaxed italic transition-all duration-150">
+			<div className="mt-2 rounded-sm border border-purple-300/30 bg-purple-100 px-3 py-2">
+				<p className="text-[10px] text-gray-600 leading-relaxed italic transition-all duration-150">
 					{explanation}
 				</p>
 			</div>
