@@ -35,7 +35,7 @@ function AssetCard({
 	return (
 		<div
 			onClick={onEdit}
-			className="group bg-elevated rounded-lg p-3 flex flex-col gap-2
+			className="group bg-elevated rounded-lg p-2 flex flex-col gap-2
                     border border-gray-200/50 hover:border-gray-200
                     hover:bg-overlay transition-all duration-200 relative cursor-pointer"
 		>
@@ -132,7 +132,7 @@ export default function AssetTable({
 	onDelete,
 }: AssetTableProps) {
 	return (
-		<div className="grid grid-cols-2 gap-2">
+		<div className="grid grid-cols-2 gap-2 xl:grid-cols-3">
 			{assets.map((asset) => (
 				<AssetCard
 					key={asset.ticker}

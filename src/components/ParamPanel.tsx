@@ -120,13 +120,13 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 	})();
 
 	return (
-		<div className="card flex flex-col gap-2 p-3">
-			<p className="text-[12px] font-semibold uppercase text-gray-900 mb-2">
+		<div className="card flex flex-col gap-1 p-2">
+			<p className="text-[12px] font-semibold uppercase text-gray-900 mb-1">
 				Algorithm Parameters
 			</p>
 
 			{/* Grid 3x2 pour les sliders */}
-			<div className="grid grid-cols-2 gap-3">
+			<div className="grid grid-cols-2 gap-2">
 				{PARAM_CONFIG.map((p) => (
 					<div
 						key={p.key}
@@ -159,7 +159,7 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 
 			{/* Volatility mode */}
 			<div
-				className="flex items-center justify-between py-2 border-t border-gray-100 mt-2"
+				className="flex items-center justify-between py-1 border-t border-gray-100 mt-1"
 				onMouseEnter={() => setActiveKey("volatilityMode")}
 				onMouseLeave={() => setActiveKey(null)}
 			>
@@ -185,8 +185,8 @@ export default function ParamPanel({ values, onChange }: ParamPanelProps) {
 			</div>
 
 			{/* Zone d'explication unique — dynamique */}
-			<div className="mt-2 rounded-sm border border-purple-300/30 bg-purple-100 px-3 py-2">
-				<p className="text-[10px] text-gray-600 leading-relaxed italic transition-all duration-150">
+			<div className="mt-1 rounded-sm border border-purple-300/30 bg-purple-100 px-3 py-2">
+				<p className="text-[11px] text-gray-600 leading-relaxed italic transition-all duration-150">
 					{explanation}
 				</p>
 			</div>

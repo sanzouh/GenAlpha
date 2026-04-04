@@ -40,7 +40,7 @@ export default function App() {
 
 			<div className="flex flex-1 gap-4 p-4 overflow-hidden">
 				{/* Colonne gauche */}
-				<aside className="w-90 shrink-0 flex flex-col gap-2 overflow-hidden h-full">
+				<aside className="w-80 xl:w-90 shrink-0 flex flex-col gap-2 overflow-hidden h-full">
 					<div className="shrink-0">
 						<ParamPanel values={params} onChange={updateParam} />
 					</div>
