@@ -83,7 +83,7 @@ const PARAM_CONFIG: ParamConfig[] = [
 		key: "maxRisk",
 		label: "Max Risk",
 		min: 5,
-		max: 40,
+		max: 90,
 		step: 1,
 		unit: "%",
 		trackClassName: "bg-red-500",

@@ -1,4 +1,4 @@
-import { ASSETS } from "@/data/assets";
+import { ASSETS, CORRELATION } from "@/data/assets";
 
 // ─────────────────────────────────────────────
 //  TYPES
@@ -95,24 +95,31 @@ export function evaluatePortfolio(
 ): Portfolio {
 	let expectedReturn = 0;
 	let volatility = 0;
-	let volatilitySquared = 0;
 
 	ASSETS.forEach((asset, i) => {
 		// Rendement : moyenne pondérée simple
 		// ex: 20% dans AAPL(12.4%) → contribution = 0.20 × 12.4 = 2.48%
 		expectedReturn += weights[i] * asset.expectedReturn;
-
-		if (mode === "linear") {
-			// Volatilité démo (linéaire)
-			volatility += weights[i] * asset.volatility;
-		} else {
-			// Volatilité Markowitz (réaliste)
-			volatilitySquared += weights[i] ** 2 * asset.volatility ** 2;
-		}
 	});
 
-	if (mode === "markowitz") {
-		volatility = Math.sqrt(volatilitySquared);
+	if (mode === "linear") {
+		ASSETS.forEach((asset, i) => {
+			volatility += weights[i] * asset.volatility;
+		});
+	} else {
+		// Markowitz complet avec corrélation : σp = √( Σi Σj wi wj σi σj ρij )
+		let varianceSum = 0;
+		ASSETS.forEach((_, i) => {
+			ASSETS.forEach((_, j) => {
+				varianceSum +=
+					weights[i] *
+					weights[j] *
+					ASSETS[i].volatility *
+					ASSETS[j].volatility *
+					CORRELATION[i][j];
+			});
+		});
+		volatility = Math.sqrt(varianceSum);
 	}
 
 	// Ratio de Sharpe : gain au-delà du taux sans risque, par unité de risque
@@ -218,10 +225,8 @@ function dominates(a: Portfolio, b: Portfolio): boolean {
 	return (
 		a.expectedReturn >= b.expectedReturn - EPS &&
 		a.volatility <= b.volatility + EPS &&
-		(
-			a.expectedReturn > b.expectedReturn + EPS ||
-			a.volatility < b.volatility - EPS
-		)
+		(a.expectedReturn > b.expectedReturn + EPS ||
+			a.volatility < b.volatility - EPS)
 	);
 }
 
