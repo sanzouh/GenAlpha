@@ -1,18 +1,18 @@
-import TickerPill from "./TickerPill";
-
-const tickers = [
-	{ symbol: "AAPL", value: "+1.24%", positive: true },
-	{ symbol: "MSFT", value: "+0.83%", positive: true },
-	{ symbol: "TSLA", value: "−2.10%", positive: false },
-	{ symbol: "NVDA", value: "+3.42%", positive: true },
-	{ symbol: "GOOGL", value: "+0.51%", positive: true },
-];
+import TickerScroller from "./TickerScroller";
+import { useAssets } from "@/hooks/useAssets";
 
 interface TopbarProps {
 	status: "ready" | "optimizing" | "paused";
 }
 
 export default function Topbar({ status }: TopbarProps) {
+	const { assets } = useAssets();
+	const tickers = assets.map((asset) => ({
+		symbol: asset.ticker,
+		value: `${asset.expectedReturn >= 0 ? "+" : ""}${asset.expectedReturn.toFixed(2)}%`,
+		positive: asset.expectedReturn >= 0,
+	}));
+
 	const statusLabel =
 		status === "optimizing"
 			? "Optimizing..."
@@ -46,12 +46,8 @@ export default function Topbar({ status }: TopbarProps) {
 				</span>
 			</div>
 
-			{/* Tickers */}
-			<div className="flex items-center gap-2">
-				{tickers.map((t) => (
-					<TickerPill key={t.symbol} {...t} />
-				))}
-			</div>
+			{/* Tickers avec animation conditionnelle */}
+			<TickerScroller tickers={tickers} />
 
 			{/* Right */}
 			<div className="flex items-center gap-3">

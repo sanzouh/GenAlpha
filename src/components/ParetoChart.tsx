@@ -6,6 +6,7 @@ import {
 	YAxis,
 	Tooltip,
 	ResponsiveContainer,
+	ReferenceLine,
 } from "recharts";
 import type { TooltipContentProps } from "recharts";
 
@@ -91,7 +92,11 @@ export default memo(function ParetoChart({
 								padding={{ top: 8, bottom: 8 }}
 							/>
 							<Tooltip content={<CustomTooltip />} />
-
+							<ReferenceLine
+								y={0}
+								stroke="rgba(255,255,255,0.08)"
+								strokeDasharray="3 3"
+							/>
 							{/* Population complète — gris discret */}
 							<Scatter
 								data={population}

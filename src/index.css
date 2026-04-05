@@ -200,6 +200,24 @@ body {
 	}
 }
 
+/* ── Ticker Animation ── */
+@keyframes ticker-scroll {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(-50%);
+	}
+}
+
+.ticker-scroll {
+	animation: ticker-scroll 20s linear infinite;
+}
+
+.ticker-scroll:hover {
+	animation-play-state: paused;
+}
+
 @layer components {
 	/* ── Cards ── */
 	.card {
