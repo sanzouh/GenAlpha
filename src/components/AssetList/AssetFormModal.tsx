@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Asset } from "@/lib/geneticAlgorithm";
@@ -97,6 +97,31 @@ export default function AssetFormModal({
 		form.volatility > 0 &&
 		Object.keys(errors).length === 0;
 
+	const handleSave = useCallback(() => {
+		onSave({
+			ticker: form.ticker,
+			name: form.name,
+			expectedReturn: parseFloat(form.expectedReturn),
+			volatility: form.volatility,
+		});
+		onClose();
+	}, [form, onClose, onSave]);
+
+	useEffect(() => {
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") {
+				event.preventDefault();
+				onClose();
+			}
+			if (event.key === "Enter" && valid) {
+				event.preventDefault();
+				handleSave();
+			}
+		};
+		window.addEventListener("keydown", onKeyDown);
+		return () => window.removeEventListener("keydown", onKeyDown);
+	}, [valid, onClose, handleSave]);
+
 	return (
 		<div
 			className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
@@ -179,13 +204,7 @@ export default function AssetFormModal({
 					<Button
 						className="flex-1 text-[13px] bg-green-500 hover:bg-green-600 text-white border-0"
 						disabled={!valid}
-						onClick={() => {
-							onSave({
-								...form,
-								expectedReturn: parseFloat(form.expectedReturn),
-							});
-							onClose();
-						}}
+						onClick={handleSave}
 					>
 						{mode === "add" ? "Add Asset" : "Save Changes"}
 					</Button>

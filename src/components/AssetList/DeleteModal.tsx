@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Asset } from "@/lib/geneticAlgorithm";
@@ -13,6 +14,21 @@ export default function DeleteModal({
 	onConfirm,
 	onCancel,
 }: DeleteModalProps) {
+	useEffect(() => {
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") {
+				event.preventDefault();
+				onCancel();
+			}
+			if (event.key === "Enter") {
+				event.preventDefault();
+				onConfirm();
+			}
+		};
+		window.addEventListener("keydown", onKeyDown);
+		return () => window.removeEventListener("keydown", onKeyDown);
+	}, [onCancel, onConfirm]);
+
 	return (
 		<div
 			className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"

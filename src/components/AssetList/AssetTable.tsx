@@ -66,7 +66,7 @@ function AssetCard({
 					{/* Dropdown */}
 					{open && (
 						<div
-							className="absolute right-0 top-7 z-50 w-28
+							className="absolute right-0 top-7 z-50 w-23
                             bg-highlight border border-gray-200
                             rounded-lg shadow-lg overflow-hidden"
 						>
