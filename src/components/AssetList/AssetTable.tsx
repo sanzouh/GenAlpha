@@ -99,15 +99,18 @@ function AssetCard({
 					<span className="text-[9px] text-gray-400 uppercase tracking-wider">
 						Return
 					</span>
-					<span className="font-mono text-[12px] font-medium text-green-400">
-						+{asset.expectedReturn.toFixed(1)}%
+					<span
+						className={`font-mono text-[12px] font-medium ${asset.expectedReturn >= 0 ? "text-green-400" : "text-red-400"}`}
+					>
+						{asset.expectedReturn >= 0 ? "+" : ""}
+						{asset.expectedReturn.toFixed(1)}%
 					</span>
 				</div>
 				<div className="flex flex-col gap-0.5 items-end">
 					<span className="text-[9px] text-gray-400 uppercase tracking-wider">
 						Vol
 					</span>
-					<span className="font-mono text-[12px] font-medium text-red-400">
+					<span className="font-mono text-[12px] font-medium text-amber-300">
 						{asset.volatility.toFixed(1)}%
 					</span>
 				</div>

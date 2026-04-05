@@ -3,6 +3,7 @@ import { ASSETS as DEFAULT_ASSETS } from "@/data/assets";
 import type { Asset } from "@/lib/geneticAlgorithm";
 
 const STORAGE_KEY = "genportfolio:assets";
+const assetEvents = new EventTarget();
 const ASSET_COLOR_POOL = [
 	"bg-aapl",
 	"bg-msft",
@@ -34,12 +35,17 @@ export function useAssets() {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(assets));
 	}, [assets]);
 
+	useEffect(() => {
+		const handleAssetsChange = () => setAssets(loadAssets());
+		assetEvents.addEventListener("assets-change", handleAssetsChange);
+		return () => {
+			assetEvents.removeEventListener("assets-change", handleAssetsChange);
+		};
+	}, []);
+
 	const add = (data: Omit<Asset, "color">) => {
 		const used = new Set(assets.map((a) => a.color));
-		setAssets((prev) => [
-			...prev,
-			{ ...data, color: pickAssetColor(used) },
-		]);
+		setAssets((prev) => [...prev, { ...data, color: pickAssetColor(used) }]);
 	};
 
 	const edit = (ticker: string, data: Omit<Asset, "color" | "ticker">) => {

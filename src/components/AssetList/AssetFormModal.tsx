@@ -20,13 +20,14 @@ const EMPTY: FormData = {
 	volatility: 0,
 };
 
-function Field({ label, children }: { label: string; children: ReactNode }) {
+function Field({ label, children, error }: { label: string; children: ReactNode; error?: string }) {
 	return (
 		<div className="flex flex-col gap-1.5">
 			<label className="text-[11px] font-medium text-gray-600 uppercase tracking-wide">
 				{label}
 			</label>
 			{children}
+			{error && <p className="text-[10px] text-red-500">{error}</p>}
 		</div>
 	);
 }
@@ -53,14 +54,26 @@ export default function AssetFormModal({
 			: EMPTY,
 	);
 
-	const set = <K extends keyof FormData>(key: K, value: FormData[K]) =>
+	const [errors, setErrors] = useState<{ [key in keyof FormData]?: string }>({});
+
+	const set = <K extends keyof FormData>(key: K, value: FormData[K]) => {
 		setForm((prev) => ({ ...prev, [key]: value }));
+		// Clear error on change
+		if (errors[key]) {
+			setErrors((prev) => ({ ...prev, [key]: undefined }));
+		}
+		// Validate volatility
+		if (key === "volatility" && (value as number) <= 0) {
+			setErrors((prev) => ({ ...prev, volatility: "Volatility must be positive" }));
+		}
+	};
 
 	const valid =
 		form.ticker.trim() &&
 		form.name.trim() &&
-		form.expectedReturn > 0 &&
-		form.volatility > 0;
+		!Number.isNaN(form.expectedReturn) &&
+		form.volatility > 0 &&
+		Object.keys(errors).length === 0;
 
 	return (
 		<div
@@ -112,7 +125,6 @@ export default function AssetFormModal({
 							<input
 								type="number"
 								step="0.1"
-								min="0"
 								className={inputClass}
 								value={form.expectedReturn}
 								onChange={(e) =>
@@ -120,7 +132,7 @@ export default function AssetFormModal({
 								}
 							/>
 						</Field>
-						<Field label="Volatility (%)">
+						<Field label="Volatility (%)" error={errors.volatility}>
 							<input
 								type="number"
 								step="0.1"
