@@ -33,7 +33,7 @@ const DEFAULT_PARAMS: GAParams = {
 	populationSize: 80,
 	generations: 60,
 	crossoverRate: 75,
-	mutationRate: 8,
+	mutationRate: 3, // Réduit de 8% à 3% pour mutations plus fines
 	maxRisk: 20,
 	volatilityMode: "markowitz",
 };

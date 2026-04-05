@@ -247,6 +247,20 @@ export function getParetoFront(population: Portfolio[]): Portfolio[] {
 	);
 }
 
+function tournamentSelect<T extends { fit: number }>(
+	population: T[],
+	tournamentSize = 3,
+): T {
+	let best = population[Math.floor(Math.random() * population.length)];
+	for (let i = 1; i < tournamentSize; i++) {
+		const candidate = population[Math.floor(Math.random() * population.length)];
+		if (candidate.fit > best.fit) {
+			best = candidate;
+		}
+	}
+	return best;
+}
+
 // ─────────────────────────────────────────────
 //  RUN GENETIC ALGORITHM
 //  Le cœur de l'application — orchestre toutes les étapes
@@ -300,29 +314,41 @@ export async function* runGeneticAlgorithm(
 			.map((p) => ({ ...p, fit: fitness(p, maxRisk) }))
 			.sort((a, b) => b.fit - a.fit); // tri décroissant — le meilleur en premier
 
-		// ── ÉTAPE 3 : Sélection — top 25% ──
-		// Math.floor arrondit à l'entier inférieur
-		// ex: 80 × 0.25 = 20 élites
-		const eliteCount = Math.floor(populationSize * 0.25);
-		const elite = evaluated.slice(0, eliteCount);
+		// ── ÉTAPE 3 : Sélection avec 3 élites ──
+		// 1. Top 10% par Sharpe (élites principales)
+		const sharpeElite = evaluated.slice(0, Math.floor(populationSize * 0.1));
+
+		// 2. Top 5% par rendement pur (pour l'extrémité haute du Pareto)
+		const returnElite = [...evaluated]
+			.sort((a, b) => b.expectedReturn - a.expectedReturn)
+			.slice(0, Math.floor(populationSize * 0.05));
+
+		// 3. Top 5% par risque minimal (pour l'extrémité basse du Pareto)
+		const riskElite = [...evaluated]
+			.sort((a, b) => a.volatility - b.volatility)
+			.slice(0, Math.floor(populationSize * 0.05));
+
+		// Fusionner sans doublons pour éviter les répétitions
+		const elite = [...sharpeElite, ...returnElite, ...riskElite].filter(
+			(p, i, arr) => arr.indexOf(p) === i,
+		);
 
 		// ── ÉTAPE 4 : Reproduction ──
-		// On commence avec les élites intacts (élitisme)
-		// { ...e } : copie de l'objet pour ne pas modifier l'original
+		// On garde un petit noyau d'élites intacts, puis on sélectionne les parents
+		// dans la population complète pour préserver la diversité.
 		const newPopulation: Portfolio[] = elite.map((e) => ({ ...e }));
 
 		while (newPopulation.length < populationSize) {
-			// Sélection aléatoire de deux parents parmi les élites
-			const parentA = elite[Math.floor(Math.random() * elite.length)];
-			const parentB = elite[Math.floor(Math.random() * elite.length)];
+			const parentA = tournamentSelect(evaluated);
+			const parentB = tournamentSelect(evaluated);
 
 			// Croisement selon le taux crossoverRate (ex: 75%)
 			let childWeights =
 				Math.random() < crossoverRate / 100
 					? crossover(parentA.weights, parentB.weights)
-					: [...parentA.weights]; // copie directe si pas de croisement
+					: [...parentA.weights];
 
-			// Mutation selon le taux mutationRate (ex: 8%)
+			// Mutation selon le taux mutationRate (ex: 3%)
 			childWeights = mutate(childWeights, mutationRate);
 
 			// Évaluation du nouvel enfant et ajout à la population

@@ -70,14 +70,14 @@ const PARAM_CONFIG: ParamConfig[] = [
 		key: "mutationRate",
 		label: "Mutation",
 		min: 1,
-		max: 20,
+		max: 10, // Réduit de 20 à 10% pour mutations plus fines
 		step: 1,
 		unit: "%",
 		trackClassName: "bg-amber-500",
 		explain: (v) =>
-			v >= 10
-				? "High — discovers new portfolios, risk of instability."
-				: "Conservative — fine-tunes existing solutions steadily.",
+			v >= 5
+				? "Moderate — balances exploration and stability."
+				: "Low — fine-tunes existing solutions steadily.",
 	},
 	{
 		key: "maxRisk",
