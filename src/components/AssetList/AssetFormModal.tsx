@@ -4,23 +4,36 @@ import { Button } from "@/components/ui/button";
 import type { Asset } from "@/lib/geneticAlgorithm";
 import type { ReactNode } from "react";
 
-type FormData = Omit<Asset, "color">;
+type FormData = {
+	ticker: string;
+	name: string;
+	expectedReturn: string;
+	volatility: number;
+};
 
 interface AssetFormModalProps {
 	mode: "add" | "edit";
 	initial?: Asset;
-	onSave: (data: FormData) => void;
+	onSave: (data: Omit<Asset, "color">) => void;
 	onClose: () => void;
 }
 
 const EMPTY: FormData = {
 	ticker: "",
 	name: "",
-	expectedReturn: 0,
+	expectedReturn: "0",
 	volatility: 0,
 };
 
-function Field({ label, children, error }: { label: string; children: ReactNode; error?: string }) {
+function Field({
+	label,
+	children,
+	error,
+}: {
+	label: string;
+	children: ReactNode;
+	error?: string;
+}) {
 	return (
 		<div className="flex flex-col gap-1.5">
 			<label className="text-[11px] font-medium text-gray-600 uppercase tracking-wide">
@@ -48,30 +61,39 @@ export default function AssetFormModal({
 			? {
 					ticker: initial.ticker,
 					name: initial.name,
-					expectedReturn: initial.expectedReturn,
+					expectedReturn: initial.expectedReturn.toString(),
 					volatility: initial.volatility,
 				}
 			: EMPTY,
 	);
 
-	const [errors, setErrors] = useState<{ [key in keyof FormData]?: string }>({});
+	const [errors, setErrors] = useState<{ [key in keyof FormData]?: string }>(
+		{},
+	);
 
 	const set = <K extends keyof FormData>(key: K, value: FormData[K]) => {
 		setForm((prev) => ({ ...prev, [key]: value }));
 		// Clear error on change
 		if (errors[key]) {
-			setErrors((prev) => ({ ...prev, [key]: undefined }));
+			setErrors((prev) => {
+				const next = { ...prev };
+				delete next[key];
+				return next;
+			});
 		}
 		// Validate volatility
 		if (key === "volatility" && (value as number) <= 0) {
-			setErrors((prev) => ({ ...prev, volatility: "Volatility must be positive" }));
+			setErrors((prev) => ({
+				...prev,
+				volatility: "Volatility must be positive",
+			}));
 		}
 	};
 
 	const valid =
 		form.ticker.trim() &&
 		form.name.trim() &&
-		!Number.isNaN(form.expectedReturn) &&
+		!Number.isNaN(parseFloat(form.expectedReturn)) &&
 		form.volatility > 0 &&
 		Object.keys(errors).length === 0;
 
@@ -127,9 +149,7 @@ export default function AssetFormModal({
 								step="0.1"
 								className={inputClass}
 								value={form.expectedReturn}
-								onChange={(e) =>
-									set("expectedReturn", parseFloat(e.target.value) || 0)
-								}
+								onChange={(e) => set("expectedReturn", e.target.value)}
 							/>
 						</Field>
 						<Field label="Volatility (%)" error={errors.volatility}>
@@ -160,7 +180,10 @@ export default function AssetFormModal({
 						className="flex-1 text-[13px] bg-green-500 hover:bg-green-600 text-white border-0"
 						disabled={!valid}
 						onClick={() => {
-							onSave(form);
+							onSave({
+								...form,
+								expectedReturn: parseFloat(form.expectedReturn),
+							});
 							onClose();
 						}}
 					>

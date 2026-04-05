@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ASSETS as DEFAULT_ASSETS } from "@/data/assets";
 import type { Asset } from "@/lib/geneticAlgorithm";
 
@@ -30,13 +30,29 @@ function loadAssets(): Asset[] {
 
 export function useAssets() {
 	const [assets, setAssets] = useState<Asset[]>(loadAssets);
+	const skipBroadcast = useRef(false);
+	const pendingBroadcast = useRef(false);
 
 	useEffect(() => {
+		if (skipBroadcast.current) {
+			skipBroadcast.current = false;
+			return;
+		}
+
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(assets));
+
+		if (pendingBroadcast.current) {
+			pendingBroadcast.current = false;
+			assetEvents.dispatchEvent(new Event("assets-change"));
+		}
 	}, [assets]);
 
 	useEffect(() => {
-		const handleAssetsChange = () => setAssets(loadAssets());
+		const handleAssetsChange = () => {
+			skipBroadcast.current = true;
+			setAssets(loadAssets());
+		};
+
 		assetEvents.addEventListener("assets-change", handleAssetsChange);
 		return () => {
 			assetEvents.removeEventListener("assets-change", handleAssetsChange);
@@ -45,16 +61,19 @@ export function useAssets() {
 
 	const add = (data: Omit<Asset, "color">) => {
 		const used = new Set(assets.map((a) => a.color));
+		pendingBroadcast.current = true;
 		setAssets((prev) => [...prev, { ...data, color: pickAssetColor(used) }]);
 	};
 
 	const edit = (ticker: string, data: Omit<Asset, "color" | "ticker">) => {
+		pendingBroadcast.current = true;
 		setAssets((prev) =>
 			prev.map((a) => (a.ticker === ticker ? { ...a, ...data } : a)),
 		);
 	};
 
 	const remove = (ticker: string) => {
+		pendingBroadcast.current = true;
 		setAssets((prev) => prev.filter((a) => a.ticker !== ticker));
 	};
 
